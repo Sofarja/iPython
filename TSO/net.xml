@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<net>
+    <ODs>
+        <OD O="01">00 30 20 60 40 20 50 30 40 50 10 20 30 60 20</OD>
+        <OD O="02">50 00 60 20 10 60 20 50 60 10 30 60 20 40 50</OD>
+        <OD O="03">40 30 00 30 20 50 10 20 10 40 50 30 10 20 10</OD>
+        <OD O="04">70 60 40 00 10 20 10 30 40 20 50 20 10 60 40</OD>
+        <OD O="05">20 40 70 20 00 20 10 50 10 20 60 30 40 20 40</OD>
+        <OD O="06">20 10 40 60 30 00 20 30 20 60 20 50 20 10 60</OD>
+        <OD O="07">10 60 10 20 10 20 00 10 20 10 40 30 50 20 40</OD>
+        <OD O="08">50 20 10 60 20 30 50 00 30 40 60 20 50 10 60</OD>
+        <OD O="09">40 70 10 20 60 30 10 20 00 30 20 60 30 10 50</OD>
+        <OD O="10">50 20 40 10 20 10 20 30 20 00 50 10 50 20 40</OD>
+        <OD O="11">60 30 10 20 10 30 40 20 30 10 00 20 10 40 20</OD>
+        <OD O="12">50 20 20 30 10 20 10 30 20 10 30 00 20 50 60</OD>
+        <OD O="13">10 50 50 10 60 40 10 30 20 10 40 10 00 20 40</OD>
+        <OD O="14">50 60 10 50 20 20 10 50 40 70 20 10 20 00 60</OD>
+        <OD O="15">30 10 20 10 40 30 10 50 40 60 20 20 40 40 00</OD>
+    </ODs>
+    <nodes>
+        <node id="01">
+            <target id="02">03</target>
+            <target id="05">01</target>
+        </node>
+        <node id="02">
+            <target id="01">04</target>
+            <target id="03">05</target>
+            <target id="04">07</target>
+        </node>
+        <node id="03">
+            <target id="02">06</target>
+            <target id="04">10</target>
+            <target id="08">12</target>
+        </node>
+        <node id="04">
+            <target id="02">08</target>
+            <target id="03">09</target>
+            <target id="06">16</target>
+            <target id="08">13</target>
+        </node>
+        <node id="05">
+            <target id="01">02</target>
+            <target id="06">17</target>
+            <target id="09">24</target>
+        </node>
+        <node id="06">
+            <target id="04">15</target>
+            <target id="05">18</target>
+            <target id="07">19</target>
+            <target id="10">26</target>
+        </node>
+        <node id="07">
+            <target id="06">20</target>
+            <target id="08">21</target>
+            <target id="10">28</target>
+        </node>
+        <node id="08">
+            <target id="03">11</target>
+            <target id="04">14</target>
+            <target id="07">22</target>
+            <target id="12">30</target>
+        </node>
+        <node id="09">
+            <target id="05">23</target>
+            <target id="10">31</target>
+            <target id="13">37</target>
+        </node>
+        <node id="10">
+            <target id="06">25</target>
+            <target id="07">27</target>
+            <target id="09">32</target>
+            <target id="11">33</target>
+            <target id="14">39</target>
+        </node>
+        <node id="11">
+            <target id="10">34</target>
+            <target id="12">35</target>
+            <target id="15">41</target>
+        </node>
+        <node id="12">
+            <target id="08">29</target>
+            <target id="11">36</target>
+        </node>
+        <node id="13">
+            <target id="09">38</target>
+            <target id="14">43</target>
+        </node>
+        <node id="14">
+            <target id="10">40</target>
+            <target id="13">44</target>
+            <target id="15">45</target>
+        </node>
+        <node id="15">
+            <target id="11">42</target>
+            <target id="14">46</target>
+        </node>
+    </nodes>
+    <links>
+        <link id="01" c="6" t="3"></link>
+        <link id="02" c="6" t="3"></link>
+        <link id="03" c="6" t="4"></link>
+        <link id="04" c="6" t="4"></link>
+        <link id="05" c="6" t="8"></link>
+        <link id="06" c="6" t="8"></link>
+        <link id="07" c="6" t="5"></link>
+        <link id="08" c="6" t="5"></link>
+        <link id="09" c="6" t="5"></link>
+        <link id="10" c="6" t="5"></link>
+        <link id="11" c="6" t="3"></link>
+        <link id="12" c="6" t="3"></link>
+        <link id="13" c="6" t="5"></link>
+        <link id="14" c="6" t="5"></link>
+        <link id="15" c="6" t="5"></link>
+        <link id="16" c="6" t="5"></link>
+        <link id="17" c="6" t="4"></link>
+        <link id="18" c="6" t="4"></link>
+        <link id="19" c="6" t="4"></link>
+        <link id="20" c="6" t="4"></link>
+        <link id="21" c="6" t="4"></link>
+        <link id="22" c="6" t="4"></link>
+        <link id="23" c="6" t="3.5"></link>
+        <link id="24" c="6" t="3.5"></link>
+        <link id="25" c="6" t="3.5"></link>
+        <link id="26" c="6" t="3.5"></link>
+        <link id="27" c="6" t="3.5"></link>
+        <link id="28" c="6" t="3.5"></link>
+        <link id="29" c="6" t="3"></link>
+        <link id="30" c="6" t="3"></link>
+        <link id="31" c="6" t="4"></link>
+        <link id="32" c="6" t="4"></link>
+        <link id="33" c="6" t="4"></link>
+        <link id="34" c="6" t="4"></link>
+        <link id="35" c="6" t="2"></link>
+        <link id="36" c="6" t="2"></link>
+        <link id="37" c="6" t="2"></link>
+        <link id="38" c="6" t="2"></link>
+        <link id="39" c="6" t="2"></link>
+        <link id="40" c="6" t="2"></link>
+        <link id="41" c="6" t="2"></link>
+        <link id="42" c="6" t="2"></link>
+        <link id="43" c="6" t="4"></link>
+        <link id="44" c="6" t="4"></link>
+        <link id="45" c="6" t="4"></link>
+        <link id="46" c="6" t="4"></link>
+    </links>
+</net>

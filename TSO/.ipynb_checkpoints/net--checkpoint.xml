@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<net>
+    <ODs>
+        <OD O="01">00 30 20 60 40 20 50 30</OD>
+        <OD O="02">50 00 60 20 10 60 20 50</OD>
+        <OD O="03">40 30 00 30 20 50 10 20</OD>
+        <OD O="04">70 60 40 00 10 20 10 30</OD>
+        <OD O="05">20 40 70 20 00 20 10 50</OD>
+        <OD O="06">20 10 40 60 30 00 20 30</OD>
+        <OD O="07">10 60 10 20 10 20 00 10</OD>
+        <OD O="08">50 20 10 60 20 30 50 00</OD>
+    </ODs>
+    <nodes>
+        <node id="01">
+            <target id="02">03</target>
+            <target id="05">01</target>
+        </node>
+        <node id="02">
+            <target id="01">04</target>
+            <target id="03">05</target>
+            <target id="04">07</target>
+        </node>
+        <node id="03">
+            <target id="02">06</target>
+            <target id="04">10</target>
+            <target id="08">12</target>
+        </node>
+        <node id="04">
+            <target id="02">08</target>
+            <target id="03">09</target>
+            <target id="06">16</target>
+            <target id="08">13</target>
+        </node>
+        <node id="05">
+            <target id="01">02</target>
+            <target id="06">17</target>
+        </node>
+        <node id="06">
+            <target id="04">15</target>
+            <target id="05">18</target>
+            <target id="07">19</target>
+        </node>
+        <node id="07">
+            <target id="06">20</target>
+            <target id="08">21</target>
+        </node>
+        <node id="08">
+            <target id="03">11</target>
+            <target id="04">14</target>
+            <target id="07">22</target>
+        </node>
+    </nodes>
+    <links>
+        <link id="01" c="6" t="3"></link>
+        <link id="02" c="6" t="3"></link>
+        <link id="03" c="6" t="4"></link>
+        <link id="04" c="6" t="4"></link>
+        <link id="05" c="6" t="8"></link>
+        <link id="06" c="6" t="8"></link>
+        <link id="07" c="6" t="5"></link>
+        <link id="08" c="6" t="5"></link>
+        <link id="09" c="6" t="5"></link>
+        <link id="10" c="6" t="5"></link>
+        <link id="11" c="6" t="3"></link>
+        <link id="12" c="6" t="3"></link>
+        <link id="13" c="6" t="5"></link>
+        <link id="14" c="6" t="5"></link>
+        <link id="15" c="6" t="5"></link>
+        <link id="16" c="6" t="5"></link>
+        <link id="17" c="6" t="4"></link>
+        <link id="18" c="6" t="4"></link>
+        <link id="19" c="6" t="4"></link>
+        <link id="20" c="6" t="4"></link>
+        <link id="21" c="6" t="4"></link>
+        <link id="22" c="6" t="4"></link>
+    </links>
+</net>
