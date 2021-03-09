@@ -24,6 +24,7 @@ class _Cell(object):
     def __init__(self, demand=0, supply=0):
         super(_Cell, self).__init__()
         self.volume = 0
+        self.re_volume = 0
         self.demand = 0
         self.supply = 0
 
@@ -104,7 +105,7 @@ class Section(object):
         """calculate demand of each cell and this section"""
         
         for cell in self.cells:
-            cell.demand = min(cell.volume, self.max_volume) / self.interval
+            cell.demand = min(cell.volume, self.max_volume / self.interval)
         self.demand = self.cells[-1].demand
 
     def calculate_supply(self):
@@ -129,13 +130,16 @@ class Section(object):
         """update the volume of each cell"""
 
         # for the first cell
+        self.cells[0].re_volume = self.cells[0].volume
         self.cells[0].volume = self.cells[0].volume + \
             self.inflow - self.flows[0]
         # for the intermediate cells
         for i in range(1, self.cells_number-1):
+            self.cells[i].re_volume = self.cells[i].volume
             self.cells[i].volume = self.cells[i].volume + \
                 self.flows[i-1]-self.flows[i]
         # for the last cells
+        self.cells[-1].re_volume = self.cells[-1].volume
         self.cells[-1].volume = self.cells[-1].volume + \
             self.flows[-1] - self.outflow
 
