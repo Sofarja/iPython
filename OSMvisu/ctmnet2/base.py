@@ -143,62 +143,6 @@ class Section(object):
         self.cells[-1].volume = self.cells[-1].volume + \
             self.flows[-1] - self.outflow
 
-class SignalController(object):
-    """SignalController
-    
-    this class resembles the signal controller at the intersection, 
-    which controls the signal light status of each entrance
-
-    Attributes:
-        entrances: list, contains the sections controled by this signal controller
-                   and its phase is recorded in the corresponding position of phase list
-        phases: list, contains the phases applied by this signal controller
-                and each phase is corresponding to a entrance in the entrance list
-        cycle: the cycle of the signal plan applied by this signal controller, the unit is second
-               for its definition, please refer to the traffic signal control theory
-        offset: the offset of the signal plan applied by this signal controller, the unit is second
-                for its definition, please refer to the traffic signal control theory
-
-    """
-    
-    def __init__(self, cycle, offset=0):
-        super(SignalController, self).__init__()
-        self.entrances = []
-        self.phases = []
-        self.cycle = cycle
-        self.offset = offset
-    
-    def add_lamp(self,section,phase):
-        """add a lamp on a section"""
-        s = phase.green_start%self.cycle
-        e = phase.green_end%self.cycle
-        self.entrances.append(section)
-        self.phases.append((s,e))
-    
-    def update_signal(self,current_time):
-        """update the status of light controled by this signal controller"""
-        time = (current_time+self.offset)%self.cycle
-        for sec,(s,e) in zip(self.entrances,self.phases):
-            if not (s<=time<=e):
-                # when the light is red, the section cannot generate demand
-                sec.demand=0
-
-class Phase(object):
-    """Phase
-
-    A phase is a specific movement that has a unique signal indication
-    different intersections can have the same phase combination
-
-    Attributes:
-        green_start: the start time of green status of a lamp in the cycle, the unit is second
-        green_end: the end time of green status of a lamp in the cycle, the unit is second
-
-    """
-    def __init__(self, green_start, green_end):
-        super(Phase, self).__init__()
-        self.green_start = green_start
-        self.green_end = green_end
-
 class _Connector(object):
     """Connector
 
@@ -208,161 +152,93 @@ class _Connector(object):
     Attributes:
         upstream: list/tuple or Section, the upstream section/sections
         downstream: list/tuple or Section, the downstream section/sections
-        connect_type: string, there are following three types of connection
-                      confluent: the upstream has mutilple sections (<=3) while the downstream only has one
-                      split: the upstream has one section while the downstream has severals (<=3)
-                      straight: the upstream and downstream both only have one section
-        
-
     """
 
-    def __init__(self, upstream, downstream,priority=None):
+    def __init__(self, upstream, downstream, green_time, off_set=0):
         super(_Connector, self).__init__()
         self.upstream = upstream
         self.downstream = downstream
-        
-        if isinstance(upstream,(tuple,list)) and isinstance(downstream,Section) :
-            self.upnum = len(upstream)
-            self.downnum = 1
-            self.connect_type='confluent'
-            self._func=self._confluent
-            
-            if priority is not None:
-                s = sum(priority)
-                self.priority = [p/s for p in priority]  # standardize the priority
-            else:
-                self.priority = [1/self.upnum for i in range(self.upnum)]
-        
-        elif isinstance(upstream,Section) and isinstance(downstream,(tuple,list)):
-            self.upnum=1
-            self.downnum=len(downstream)
-            self.connect_type = 'split'
-            self._func=self._split
-            
-            if priority is not None:
-                s = sum(priority)
-                self.priority = [p/s for p in priority]  # standardize the priority
-            else:
-                self.priority = [1/self.downnum for i in range(self.downnum)]
-        
-        elif isinstance(upstream,Section) and isinstance(downstream,Section) :
-            self.upnum=1
-            self.downnum=1
-            self.connect_type = 'straight'
-            self._func = self._straight
-        
+        self.green_time = [int(i) for i in green_time]
+        self.phase = [0]
+        m = 0
+        for i in self.green_time:
+            m+=i
+            self.phase.append(m)
+        self.off_set = int(off_set)
+        self.cycle = sum(self.green_time)
+
+        if len(upstream)==3:
+            self._func=self.phase_t
         else:
-            raise ValueError('cannot connect these two objects')
+            self._func=self.phase_f
 
-
-    def _straight(self):
-        """the calculate method for staright connection"""
-        
-        flow = min(self.upstream.demand, self.downstream.supply)
-        self.upstream.outflow = flow
-        self.downstream.inflow = flow
+    def phase_t(self, current_time):
+        current_time=(current_time+self.off_set)%self.cycle
+        u1, u2, u3 = self.upstream
+        d1, d2, d3 = self.downstream
+        if self.phase[0]<=current_time<self.phase[1]:
+            u1.outflow=min(u1.demand/2,d3.supply)
+            d3.inflow=u1.outflow
+            d2.inflow=min(u3.demand/2,u2.supply)
+            d1.inflow=min(u2.demand/2+u3.demand/2,d1.supply)
+            u2.outflow=min(u2.demand/2,d1.supply*u2.demand/(u2.demand+u3.demand))
+            u3.outflow=min(u3.demand/2,d1.supply-u2.outflow)+d2.inflow
+        elif self.phase[1]<=current_time<self.phase[2]:
+            d1.inflow=min(u2.demand/2,d1.supply)
+            d2.inflow=min(u3.demand/2,d2.supply)
+            u3.outflow=d2.inflow
+            d3.inflow=min(u1.demand/2+u2.demand/2,d3.supply)
+            u1.outflow=min(u1.demand/2,d3.supply*u1.demand/(u1.demand+u2.demand))
+            u2.outflow=min(u2.demand/2,d3.supply-u1.outflow)+d1.inflow
+        elif self.phase[2]<=current_time<self.phase[3]:
+            d1.inflow=min(u2.demand/2,d1.supply)
+            u2.outflow=d1.inflow
+            d3.inflow=min(u1.demand/2,d3.supply)
+            d2.inflow=min(u1.demand/2+u3.demand/2,d2.supply)
+            u3.outflow=min(u3.demand/2,d2.supply*u3.demand/(u1.demand+u3.demand))
+            u1.outflow=min(u1.demand/2,d2.supply-u3.outflow)+d3.inflow
     
-    def _split(self):
-        """the calculate method for split connection"""
-        
-        temp = [self.upstream.demand]
-        for item, p in zip(self.downstream, self.priority):
-            temp.append(item.supply)
-        
-        flow = min(temp) # total flow
-        
-        self.upstream.outflow = flow
-        
-        for item, p in zip(self.downstream, self.priority):
-            item.inflow += p * flow
+    def phase_f(self, current_time):
+        current_time=(current_time+self.off_set)%self.cycle
+        u1, u2, u3, u4 = self.upstream
+        d1, d2, d3, d4 = self.downstream
+        if self.phase[0]<=current_time<self.phase[1]:
+            d2.inflow=min(u3.demand/3,d2.supply)
+            d4.inflow=min(u1.demand/3,d4.supply)
+            d1.inflow=min(u2.demand/3+u3.demand/3,d1.supply)
+            d3.inflow=min(u1.demand/3+u4.demand/3,d3.supply)
+            u2.outflow=min(u2.demand/3,d1.supply*u2.demand/(u2.demand+u3.demand))
+            u4.outflow=min(u4.demand/3,d3.supply*u4.demand/(u1.demand+u4.demand))
+            u3.outflow=min(u3.demand/3,d1.supply-u2.outflow)+d2.inflow
+            u1.outflow=min(u1.demand/3,d3.supply-u4.outflow)+d4.inflow
+        elif self.phase[1]<=current_time<self.phase[2]:
+            d1.inflow=min(u2.demand/3,d1.supply)
+            d3.inflow=min(u4.demand/3,d3.supply)
+            d2.inflow=min(u1.demand/3+u3.demand/3,d2.supply)
+            d4.inflow=min(u1.demand/3+u3.demand/3,d4.supply)
+            u2.outflow=d1.inflow
+            u4.outflow=d3.inflow
+            u3.outflow=min(u3.demand/3,(d4.supply+d2.supply)*u3.demand/(u1.demand+u3.demand))
+            u1.outflow=min(u1.demand/3,(d4.supply+d2.supply)*u1.demand/(u1.demand+u3.demand))
+        elif self.phase[2]<=current_time<self.phase[3]:
+            d1.inflow=min(u2.demand/3,d1.supply)
+            d3.inflow=min(u4.demand/3,d3.supply)
+            d2.inflow=min(u3.demand/3+u4.demand/3,d2.supply)
+            d4.inflow=min(u1.demand/3+u2.demand/3,d4.supply)
+            u1.outflow=min(u1.demand/3,d4.supply*u1.demand/(u1.demand+u2.demand))
+            u3.outflow=min(u3.demand/3,d2.supply*u3.demand/(u3.demand+u4.demand))
+            u2.outflow=min(u2.demand/3,d4.supply-u1.outflow)+d1.inflow
+            u4.outflow=min(u4.demand/3,d2.supply-u3.outflow)+d3.inflow
+        elif self.phase[3]<=current_time<self.phase[4]:
+            d2.inflow=min(u3.demand/3,d2.supply)
+            d4.inflow=min(u1.demand/3,d4.supply)
+            d1.inflow=min(u2.demand/3+u4.demand/3,d1.supply)
+            d3.inflow=min(u2.demand/3+u4.demand/3,d3.supply)
+            u1.outflow=d4.inflow
+            u3.outflow=d2.inflow
+            u2.outflow=min(u2.demand/3,(d1.supply+d3.supply)*u2.demand/(u2.demand+u4.demand))
+            u4.outflow=min(u4.demand/3,(d1.supply+d3.supply)*u4.demand/(u2.demand+u4.demand))
 
-    def _confluent(self):
-        """the calculate method for confluent connection"""
-        
-        # self.upnum == 2 means that this is a conflunce section
-        if self.upnum == 2 :
-            u1, u2 = self.upstream
-            p1, p2 = self.priority
-            supply = self.downstream.supply
-            if (u1.demand+u2.demand)/2 <= supply:
-                u1.outflow += u1.demand/2
-                u2.outflow += u2.demand/2
-                self.downstream.inflow = (u1.demand+u2.demand)/2
-            else:
-                flow1 = _mid(u1.demand/2, supply-u2.demand/2, p1*supply)
-                flow2 = _mid(u2.demand/2, supply-u1.demand/2, p2*supply)
-                u1.outflow += flow1
-                u2.outflow += flow2
-                self.downstream.inflow = (flow1+flow2)
-        
-        # self.upnum == 3 means that this connector is in the intersection
-        elif self.upnum == 3:
-            
-            # use "rec" to record entrance that is not in red (demand is not 0)
-            rec = [] 
-            for i,item in enumerate(self.upstream):
-                if item.demand == 0:
-                    item.outflow=0
-                else:
-                    rec.append(i)
-            
-            if len(rec) == 2 :
-                u1 = self.upstream[rec[0]]
-                p1 = self.priority[rec[0]]
-                u2 = self.upstream[rec[1]]
-                p2 = self.priority[rec[1]]
-                
-                # adjust p1 and p2 to satisfy the condition sum(priorities)=1
-                s = p1 + p2
-                p1 = p1/s
-                p2 = p2/s
-                
-                supply = self.downstream.supply
-                if (u1.demand+u2.demand)/3 <= supply:
-                    u1.outflow = u1.demand/3
-                    u2.outflow = u2.demand/3
-                    self.downstream.inflow = (u1.demand+u2.demand)/3
-                else:
-                    flow1 = _mid(u1.demand/3, supply-u2.demand/3, p1*supply)
-                    flow2 = _mid(u2.demand/3, supply-u1.demand/3, p2*supply)
-                    u1.outflow = flow1
-                    u2.outflow = flow2
-                    self.downstream.inflow = (flow1+flow2)/3
-            elif len(rec) == 1:
-                u = self.upstream[rec[0]]
-                flow = min(u.demand/3, self.downstream.supply)
-                u.outflow = flow
-                self.downstream.inflow = flow
-            else:
-                # that means len(rec)==3 
-                sumdemand = sum([item.demand for item in self.upstream])/3
-                if sumdemand <= self.downstream.supply:
-                    for item in self.upstream:
-                        item.outflow += item.demand/3
-                    self.downstream.inflow = sumdemand
-                else:
-                    u1, u2, u3 = self.upstream
-                    p1, p2, p3 = self.priority
-                    supply = self.downstream.supply
-                    flow1 = _mid(u1.demand/3, supply-u2.demand/3-u3.demand/3, p1*supply)
-                    flow2 = _mid(u2.demand/3, supply-u1.demand/3-u3.demand/3, p2*supply)
-                    flow3 = _mid(u3.demand/3, supply-u1.demand/3-u2.demand/3, p3*supply)
-                    u1.outflow += flow1
-                    u2.outflow += flow2
-                    u3.outflow += flow3
-                    self.downstream.inflow = (flow1+flow2+flow3)
-                    
-                    """"flows = [p*self.downstream.supply for p in self.priority]
-                    sumdemand = 0
-                    for item, flow in zip(self.upstream, flows):
-                        item.outflow = min(flow, item.demand)
-                        sumdemand = sumdemand+item.outflow
-                    self.downstream.inflow = sumdemand"""
-
-        else:
-            raise ValueError('there is a confluentor having more than three branches.')
-    
-    def calculate_flow(self):
+    def calculate_flow(self, current_time):
         """calculate the inflows and outflows for the upstream and downstream sections"""
-        self._func()
-
+        self._func(current_time)
