@@ -7,7 +7,7 @@
 # @LastEditTime: 2020-02-13 22:39:19
 # @LastEditors: Keyangzhang
 
-from .base import Section,SignalController,Phase
+from .base import Section
 from .base import _Connector
 from random import uniform
 
@@ -123,7 +123,7 @@ class Simulator(object):
         it can create the network elements including Section, SignalController, Phase
 
         Args:
-            objclass: str, it should be one of the Section, SignalController or Phase
+            objclass: str, it should be Section
             kargs: dict, contains the parameters and value for the object you want to create
                    the keys should be consistent with the parameters of the inital function
                    e.g. for Section, it may be {'lanes_length':5,'lanes_number':3,'cell_length':0.5}     
@@ -134,23 +134,10 @@ class Simulator(object):
             self.sections[objid]=obj
             return obj
         
-        elif objclass=='SignalController':
-            obj = SignalController(**kargs)
-            self.signalcontrollers[objid]=obj
-            return obj
-        
-        elif objclass=='Phase':
-            obj = Phase(**kargs)
-            self.phases[objid]=obj
-            return obj
-        
-        elif objclass=='Intersection':
-            pass
-        
         else:
             raise ValueError('Invalid object creation: '+objclass)
 
-    def connect(self,id_upstream,id_downstream,priority=None):
+    def connect(self,id_upstream,id_downstream,green_time,off_set):
         """ connect sections
 
         it is used to connect the created sections 
@@ -158,48 +145,11 @@ class Simulator(object):
         Args:
             id_upstream: id or tuple/list, the id or the tuple/list of ids of the upstream sections
             id_downstream: id or tuple/list, the id or the tuple/list of ids of the downstream sections
-            priority: float, the relative weight of the flows  
         """
-        if isinstance(id_upstream,(list,tuple)):
-            upstream = [self.sections[i] for i in id_upstream]
-            downstream = self.sections[id_downstream]
-            cnct = _Connector(upstream,downstream,priority)
-            self.connectors.append(cnct)
-   
-        elif isinstance(id_downstream,(list,tuple)):
-            upstream = self.sections[id_upstream]
-            downstream = [self.sections[i] for i in id_downstream]
-            cnct = _Connector(upstream,downstream,priority)
-            self.connectors.append(cnct)
-        
-        else:
-            upstream = self.sections[id_upstream]
-            downstream = self.sections[id_downstream]
-            cnct = _Connector(upstream,downstream)
-            self.connectors.append(cnct)
-
-
-
-    def add_lamp(self,controller_id,phase_id,section_id):
-        """ add lamp
-
-        add a lamp that controled by a sigal controller on a particular section with designative phase
-
-        Args:
-            controller_id, the id of signal controllers that controls this lamp
-            pahse_id, the id of phase applied on the lamp
-            section_id, the id or tuple/list of id of section on which you want to add a lamp
-        """
-        sig = self.signalcontrollers[controller_id]
-        pha = self.phases[phase_id]
-        
-        if isinstance(section_id,(tuple,list)):
-            for i in section_id:
-                sec = self.sections[i]
-                sig.add_lamp(sec,pha)
-        else:
-            sec = self.sections[section_id]
-            sig.add_lamp(sec,pha)
+        upstream = [self.sections[i] for i in id_upstream]
+        downstream = [self.sections[i] for i in id_downstream]
+        cnct = _Connector(upstream,downstream,green_time,off_set)
+        self.connectors.append(cnct)
 
     def set_arrival(self,section_id,arrival_volume,distribution='poisson'):
         """set number of vehicles arriving from the upstream
@@ -250,14 +200,6 @@ class Simulator(object):
             sec.calculate_demand()
             sec.calculate_supply()
 
-        # update signal status
-        for sig in self.signalcontrollers.values():
-            sig.update_signal(self.currenttime)
-            
-        for sec in self.sections.values():
-            sec.inflow=0
-            sec.outflow=0
-
         # set the demand and downstream capacity
         self.arrival.update()
         self.departure.update()
@@ -266,7 +208,7 @@ class Simulator(object):
         for sec in self.sections.values():
             sec.calculate_flow()
         for cnct in self.connectors:
-            cnct.calculate_flow()
+            cnct.calculate_flow(self.currenttime)
 
         # update volume
         for sec in self.sections.values():
