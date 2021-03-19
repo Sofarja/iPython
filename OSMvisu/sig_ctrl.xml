@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sig>
+  <signalcontrollers>
+    <signalcontroller id="1">
+      <cycle>120</cycle>
+      <offset>10</offset>
+    </signalcontroller>
+  </signalcontrollers>
+  <phases>
+    <phase id="1">
+      <green_start>0</green_start>
+      <green_end>30</green_end>
+    </phase>
+  </phases>
+  <lamps>
+    <lamp id="1">
+      <controller_id>1</controller_id>
+      <phase_id>1</phase_id>
+      <section_id>1 2 3 4</section_id>
+    </lamp>
+  </lamps>
+</sig>
