@@ -29,48 +29,10 @@ def create_from_xml(netfile=None,sigfile=None,simulator=None):
             simulator.create('Section',sec_id, argdict)
 
         for cnc in root.iter('connection'):
-            #downstream = cnc.find('downstream').text.split(' ')
             downstream = re.findall(r"\d+\.?\d*",cnc.find('downstream').text)
-            if len(downstream)==1:
-                downstream = downstream[0]
-
-            #upstream = cnc.find('upstream').text.split(' ')
             upstream = re.findall(r"\d+\.?\d*",cnc.find('upstream').text)
-            if len(upstream)==1:
-                upstream = upstream[0]
-            
-            #priority = cnc.find('priority').text
-            priority = re.findall(r"\d+\.?\d*",cnc.find('priority').text)
-            if priority is None:
-                simulator.connect(upstream,downstream)
-            else:
-                #priority = list(map(eval,priority.split(' ')))
-                simulator.connect(upstream,downstream)
-    
-    # config signal control
-    if sigfile is not None:
-        tree = ET.parse(sigfile)
-        root = tree.getroot()
-
-        # create signal controllers
-        paras = ['cycle','offset']
-        for sc in root.iter('signalcontroller'):
-            sc_id = sc.attrib['id']
-            argdict = {para:eval(sc.find(para).text) for para in paras}
-            simulator.create('SignalController',sc_id,argdict)
-        
-        # create phase
-        paras = ['green_start','green_end']
-        for ph in root.iter('phase'):
-            ph_id = ph.attrib['id']
-            argdict = {para:eval(ph.find(para).text) for para in paras}
-            simulator.create('Phase',ph_id,argdict)
-        
-        # create lamp
-        for lamp in root.iter('lamp'):
-            controller_id = lamp.find('controller_id').text
-            ph_id = lamp.find('phase_id').text
-            sec_id = lamp.find('section_id').text.split(' ')
-            simulator.add_lamp(controller_id,ph_id,sec_id)
+            green_time = re.findall(r"\d+\.?\d*",cnc.find('green_time').text)
+            off_set = eval(cnc.find('off_set').text)
+            simulator.connect(upstream,downstream,green_time,off_set)
 
     return simulator
