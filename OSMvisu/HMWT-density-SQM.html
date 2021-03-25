@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>3D动态热力图</title>
+    <link rel="stylesheet" type="text/css" 
+     href="https://a.amap.com/jsapi_demos/static/bezier/bezier.css"/>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&7213399285a6a1be8f865ee7b5307547
+    &plugin=AMap.CustomLayer,AMap.ControlBar,AMap.Heatmap"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script>    
+    var map = new AMap.Map("container", {
+        viewMode:'3D',
+        pitch:70,
+        resizeEnable:true,
+        center: [118.7892,32.005477],
+        zoom: 17
+    });
+    map.addControl(new AMap.ControlBar({}));
+        
+    // GPS转换为高德坐标
+    var GPS = {
+    PI : 3.14159265358979324,
+    x_pi : 3.14159265358979324 * 3000.0 / 180.0,
+    delta : function (lat, lng) {
+        // Krasovsky 1940
+        // a = 6378245.0, 1/f = 298.3
+        // b = a * (1 - f)
+        // ee = (a^2 - b^2) / a^2;
+        var a = 6378245.0; //  a: 卫星椭球坐标投影到平面地图坐标系的投影因子。
+        var ee = 0.00669342162296594323; //  ee: 椭球的偏心率。
+        var dLat = this.transformLat(lng - 105.0, lat - 35.0);
+        var dLng = this.transformLon(lng - 105.0, lat - 35.0);
+        var radLat = lat / 180.0 * this.PI;
+        var magic = Math.sin(radLat);
+        magic = 1 - ee * magic * magic;
+        var sqrtMagic = Math.sqrt(magic);
+        dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * this.PI);
+        dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * this.PI);
+        return {'lat': dLat, 'lng': dLng};
+    },
+
+    //GPS---高德
+    gcj_encrypt : function ( wgsLat , wgsLng ) {
+        if (this.outOfChina(wgsLat, wgsLng))
+            return {'lat': wgsLat, 'lng': wgsLng};
+
+        var d = this.delta(wgsLat, wgsLng);
+        return {'lat' : wgsLat + d.lat,'lng' : wgsLng + d.lng};
+    },
+    outOfChina : function (lat, lng) {
+        if (lng < 72.004 || lng > 137.8347)
+            return true;
+        if (lat < 0.8293 || lat > 55.8271)
+            return true;
+        return false;
+    },
+    transformLat : function (x, y) {
+        var ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+        ret += (20.0 * Math.sin(6.0 * x * this.PI) + 20.0 * Math.sin(2.0 * x * this.PI)) * 2.0 / 3.0;
+        ret += (20.0 * Math.sin(y * this.PI) + 40.0 * Math.sin(y / 3.0 * this.PI)) * 2.0 / 3.0;
+        ret += (160.0 * Math.sin(y / 12.0 * this.PI) + 320 * Math.sin(y * this.PI / 30.0)) * 2.0 / 3.0;
+        return ret;
+    },
+    transformLon : function (x, y) {
+        var ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+        ret += (20.0 * Math.sin(6.0 * x * this.PI) + 20.0 * Math.sin(2.0 * x * this.PI)) * 2.0 / 3.0;
+        ret += (20.0 * Math.sin(x * this.PI) + 40.0 * Math.sin(x / 3.0 * this.PI)) * 2.0 / 3.0;
+        ret += (150.0 * Math.sin(x / 12.0 * this.PI) + 300.0 * Math.sin(x / 30.0 * this.PI)) * 2.0 / 3.0;
+        return ret;
+    }
+};
+    var points =[元胞坐标];
+
+    var data0 = [元胞流量数据];
+
+    var num = points.length;
+    var time = data0[0].length;
+    
+    var data = new Array(); //先声明一维 
+    for (var i = 0; i < num; i++) { //一维长度
+        data[i] = new Array(); //再声明二维 
+        for (var j = 0; j < time; j++) { //二维长度
+            data[i][j] = 0; // 赋值，每个数组元素的值为0
+        }
+    }
+   
+    for (var i = 0; i < num; i++)
+    {
+        for(var j = 0; j < time; j++)
+        {
+            if(data0[i][j] == 0){
+                data[i][j] = 0.1
+            }else{
+                data[i][j] = data0[i][j]
+            }
+        }
+    }
+
+    var heatmap = new AMap.Heatmap(map, heatmapOpts);          
+    var heatmapOpts = {
+        //3d 相关的参数
+        '3d': {
+            //热度转高度的曲线控制参数，可以利用左侧的控制面板获取
+            heightBezier: [0.4, 0.2, 0.4, 0.8],
+            //取样精度，值越小，曲面效果越精细，但同时性能消耗越大
+            gridSize: 2,
+            heightScale: 1
+        }
+    };
+    if (!isSupportCanvas()) {
+        alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+    }
+    //详细的参数,可以查看heatmap.js的文档 http://www.patrick-wied.at/static/heatmapjs/docs.html
+    //参数说明如下:
+    /* visible 热力图是否显示,默认为true
+     * opacity 热力图的透明度,分别对应heatmap.js的minOpacity和maxOpacity
+     * radius 势力图的每个点的半径大小   
+     * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+     * {
+     .2:'rgb(0, 255, 255)',
+     .5:'rgb(0, 110, 255)',
+     .8:'rgb(100, 0, 255)'
+     }
+     其中 key 表示插值的位置, 0-1 
+     value 为颜色值 
+     */     
+    var c = setInterval(showHeatMap,100);   
+    var sum = 0;      
+    function showHeatMap(){      
+        if (sum == time){
+            clearInterval(c); 
+        }else{     
+            //动态热力图
+            for (var i=0; i<points.length; i++)
+        {
+            points[i]["count"] = data[i][sum];
+        }
+            sum = sum + 1;      
+            heatmap.setDataSet({
+                data:points,
+                max:140
+            });
+        }
+    }      
+             
+    showHeatMap();
+    /*
+    //控制左侧的曲线控制面板
+    (function () {
+        var bezierInp = document.getElementById('bezierInp');
+        function onBezierUpdate(val) {
+            bezierInp.value = (val);
+            heatmapOpts['3d'].heightBezier = val;
+            if (heatmap) {
+            heatmap.setOptions(heatmapOpts);
+            }
+        }
+        bezierHelper.setBezier(heatmapOpts['3d'].heightBezier);
+        bezierInp.value = (bezierHelper.getBezier());
+        window.onBezierUpdate = onBezierUpdate;
+})();
+    */
+    //判断浏览区是否支持canvas
+    function isSupportCanvas() {
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    } 
+</script>
+</body>
+</html>
