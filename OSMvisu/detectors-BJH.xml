@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<detectors>
+	<detector id="0">
+		<volume>0.8</volume>
+		<coor>[31.93069529155155, 118.82148453298552]</coor>
+	</detector>
+	<detector id="1">
+		<volume>0.8</volume>
+		<coor>[31.930246138085977, 118.82148225070165]</coor>
+	</detector>
+	<detector id="2">
+		<volume>0.8</volume>
+		<coor>[31.929796998023157, 118.82147803214595]</coor>
+	</detector>
+	<detector id="3">
+		<volume>1.4</volume>
+		<coor>[31.929347869130105, 118.82147277434632]</coor>
+	</detector>
+	<detector id="4">
+		<volume>5.0</volume>
+		<coor>[31.928898727675314, 118.82147194547036]</coor>
+	</detector>
+	<detector id="5">
+		<volume>9.6</volume>
+		<coor>[31.928449575891772, 118.82147464849012]</coor>
+	</detector>
+	<detector id="6">
+		<volume>0.8</volume>
+		<coor>[31.92602439085721, 118.8218890792478]</coor>
+	</detector>
+	<detector id="7">
+		<volume>0.8</volume>
+		<coor>[31.926462293817245, 118.8217752067444]</coor>
+	</detector>
+	<detector id="8">
+		<volume>0.8</volume>
+		<coor>[31.92690508033259, 118.82168929249532]</coor>
+	</detector>
+	<detector id="9">
+		<volume>1.4</volume>
+		<coor>[31.92735198214892, 118.8216387347225]</coor>
+	</detector>
+	<detector id="10">
+		<volume>5.0</volume>
+		<coor>[31.92779997513195, 118.82160157320486]</coor>
+	</detector>
+	<detector id="11">
+		<volume>9.6</volume>
+		<coor>[31.928249642075244, 118.81847650793793]</coor>
+	</detector>
+	<detector id="12">
+		<volume>0.5</volume>
+		<coor>[31.9282278462437, 118.81900507512597]</coor>
+	</detector>
+	<detector id="13">
+		<volume>0.8</volume>
+		<coor>[31.92820684424207, 118.819533643352]</coor>
+	</detector>
+	<detector id="14">
+		<volume>0.8</volume>
+		<coor>[31.928191327995137, 118.82006248869412]</coor>
+	</detector>
+	<detector id="15">
+		<volume>0.8</volume>
+		<coor>[31.9281722308654, 118.82059119112802]</coor>
+	</detector>
+	<detector id="16">
+		<volume>1.4</volume>
+		<coor>[31.928149427829588, 118.82111973144082]</coor>
+	</detector>
+	<detector id="17">
+		<volume>5.0</volume>
+		<coor>[31.92800590650252, 118.82447899016063]</coor>
+	</detector>
+	<detector id="18">
+		<volume>9.6</volume>
+		<coor>[31.92803205237915, 118.82395066822053]</coor>
+	</detector>
+	<detector id="19">
+		<volume>0.5</volume>
+		<coor>[31.928057053867953, 118.8234222960742]</coor>
+	</detector>
+	<detector id="20">
+		<volume>0.8</volume>
+		<coor>[31.928077328196128, 118.82289364490185]</coor>
+	</detector>
+	<detector id="21">
+		<volume>0.8</volume>
+		<coor>[31.928097000895598, 118.8223649378071]</coor>
+	</detector>
+	<detector id="22">
+		<volume>0.8</volume>
+		<coor>[31.928118333631865, 118.82183631260237]</coor>
+	</detector>
+	<detector id="23">
+		<volume>1.4</volume>
+		<coor>[31.928225, 118.821476]</coor>
+	</detector>
+	<detector id="24">
+		<volume>5.0</volume>
+		<coor>[31.929222, 118.82147]</coor>
+	</detector>
+	<detector id="25">
+		<volume>9.6</volume>
+		<coor>[31.93, 118.821481]</coor>
+	</detector>
+	<detector id="26">
+		<volume>0.5</volume>
+		<coor>[31.930984, 118.821486]</coor>
+	</detector>
+	<detector id="27">
+		<volume>0.5</volume>
+		<coor>[31.928024, 118.821583]</coor>
+	</detector>
+	<detector id="28">
+		<volume>0.5</volume>
+		<coor>[31.927578, 118.82162]</coor>
+	</detector>
+	<detector id="29">
+		<volume>0.5</volume>
+		<coor>[31.9272, 118.821647]</coor>
+	</detector>
+	<detector id="30">
+		<volume>0.5</volume>
+		<coor>[31.926677, 118.821722]</coor>
+	</detector>
+	<detector id="31">
+		<volume>0.5</volume>
+		<coor>[31.926239, 118.82183]</coor>
+	</detector>
+	<detector id="32">
+		<volume>7.3</volume>
+		<coor>[31.925989, 118.821878]</coor>
+	</detector>
+	<detector id="33">
+		<volume>0.5</volume>
+		<coor>[31.925616, 118.822023]</coor>
+	</detector>
+	<detector id="34">
+		<volume>0.5</volume>
+		<coor>[31.928138, 118.821384]</coor>
+	</detector>
+	<detector id="35">
+		<volume>0.5</volume>
+		<coor>[31.92817, 118.820644]</coor>
+	</detector>
+	<detector id="36">
+		<volume>0.5</volume>
+		<coor>[31.928193, 118.820108]</coor>
+	</detector>
+	<detector id="37">
+		<volume>1.4</volume>
+		<coor>[31.928206, 118.819442]</coor>
+	</detector>
+	<detector id="38">
+		<volume>0.8</volume>
+		<coor>[31.928243, 118.818702]</coor>
+	</detector>
+	<detector id="39">
+		<volume>0.8</volume>
+		<coor>[31.928261, 118.818123]</coor>
+	</detector>
+	<detector id="40">
+		<volume>0.8</volume>
+		<coor>[31.928129, 118.821572]</coor>
+	</detector>
+	<detector id="41">
+		<volume>1.4</volume>
+		<coor>[31.928079, 118.822811]</coor>
+	</detector>
+	<detector id="42">
+		<volume>5.0</volume>
+		<coor>[31.928061, 118.823396]</coor>
+	</detector>
+	<detector id="43">
+		<volume>9.6</volume>
+		<coor>[31.92802, 118.824179]</coor>
+	</detector>
+	<detector id="44">
+		<volume>0.5</volume>
+		<coor>[31.927992, 118.824775]</coor>
+	</detector>
+</detectors>
