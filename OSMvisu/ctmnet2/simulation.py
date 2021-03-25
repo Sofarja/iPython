@@ -9,6 +9,7 @@
 
 from .base import Section
 from .base import _Connector
+import random
 from random import uniform
 
 def _poisson(lam):
@@ -83,6 +84,8 @@ class _Departure(object):
         
         if distribution == 'constant':
             self.dist_func.append(_constant)
+        elif distribution == 'poisson':
+            self.dist_func.append(_poisson)
         else:
             raise ValueError('No such type of distribution')
     
@@ -116,6 +119,7 @@ class Simulator(object):
         self.currenttime = 0
         self.arrival = _Arrival()
         self.departure = _Departure()
+        random.seed(100)
 
     def create(self,objclass,objid,kargs):
         """ create network elements
@@ -310,7 +314,7 @@ class Simulator(object):
                 
                 for k, flow in enumerate(sec.flows):
                     vol = sec[k].re_volume
-                    if vol==0:
+                    if vol<=1:
                         vels.append(sec.free_speed)
                     else:
                         vels.append(round(flow*3600/sec.interval/(vol/sec.cell_length),2))
@@ -320,8 +324,8 @@ class Simulator(object):
                 # calculate for the last cell
                 flow = sec.outflow
                 vol = sec[-1].re_volume
-                if vol==0:
-                    vels.append(0)
+                if vol<=1:
+                    vels.append(sec.free_speed)
                 else:
                     vels.append(round(flow*3600/sec.interval/(vol/sec.cell_length),2))
 
@@ -330,7 +334,7 @@ class Simulator(object):
             
             for i,sec in self.sections.items():
                 flow = sum(sec.flows)+sec.outflow
-                volume = sum([c.volume for c in sec])
+                volume = sum([c.re_volume for c in sec])
                 if volume==0:
                     vel = 0
                 else:
