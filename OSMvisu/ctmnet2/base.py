@@ -25,8 +25,8 @@ class _Cell(object):
         super(_Cell, self).__init__()
         self.volume = 0
         self.re_volume = 0
-        self.demand = 0
-        self.supply = 0
+        self.demand = demand
+        self.supply = supply
 
 class Section(object):
     """road section
