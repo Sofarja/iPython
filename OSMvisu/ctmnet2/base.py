@@ -55,7 +55,7 @@ class Section(object):
 
         # constant parameters
         self.lanes_length = lanes_length/1000
-        self.lanes_number = lanes_number*2
+        self.lanes_number = lanes_number
         self.cell_length = cell_length
         self.cells_number = int(self.lanes_length/self.cell_length+1)  # the number of cell this section contains
         self.free_speed = free_speed
@@ -169,8 +169,16 @@ class _Connector(object):
 
         if len(upstream)==3:
             self._func=self.phase_t
-        else:
+        elif len(upstream)==4:
             self._func=self.phase_f
+        elif len(upstream)==1:
+            self._func=self.phase_s
+    
+    def phase_s(self, current_time):
+        u=self.upstream[0]
+        d=self.downstream[0]
+        d.inflow=min(d.supply,u.demand)
+        u.outflow=d.inflow
 
     def phase_t(self, current_time):
         current_time=(current_time+self.off_set)%self.cycle
@@ -202,7 +210,7 @@ class _Connector(object):
         current_time=(current_time+self.off_set)%self.cycle
         u1, u2, u3, u4 = self.upstream
         d1, d2, d3, d4 = self.downstream
-        if self.phase[0]<=current_time<self.phase[1]:
+        if self.phase[0]<=current_time<self.phase[1]-3:
             d2.inflow=min(u3.demand/3,d2.supply)
             d4.inflow=min(u1.demand/3,d4.supply)
             d1.inflow=min(u2.demand/3+u3.demand/3,d1.supply)
@@ -211,7 +219,16 @@ class _Connector(object):
             u4.outflow=min(u4.demand/3,d3.supply*u4.demand/(u1.demand+u4.demand))
             u3.outflow=min(u3.demand/3,d1.supply-u2.outflow)+d2.inflow
             u1.outflow=min(u1.demand/3,d3.supply-u4.outflow)+d4.inflow
-        elif self.phase[1]<=current_time<self.phase[2]:
+        elif self.phase[1]-3<=current_time<self.phase[1]:
+            d1.inflow=0
+            u1.outflow=0
+            d2.inflow=0
+            u2.outflow=0
+            d3.inflow=0
+            u3.outflow=0
+            d4.inflow=0
+            u4.outflow=0
+        elif self.phase[1]<=current_time<self.phase[2]-3:
             d1.inflow=min(u2.demand/3,d1.supply)
             d3.inflow=min(u4.demand/3,d3.supply)
             d2.inflow=min(u1.demand/3+u3.demand/3,d2.supply)
@@ -220,7 +237,16 @@ class _Connector(object):
             u4.outflow=d3.inflow
             u3.outflow=min(u3.demand/3,(d4.supply+d2.supply)*u3.demand/(u1.demand+u3.demand))
             u1.outflow=min(u1.demand/3,(d4.supply+d2.supply)*u1.demand/(u1.demand+u3.demand))
-        elif self.phase[2]<=current_time<self.phase[3]:
+        elif self.phase[2]-3<=current_time<self.phase[2]:
+            d1.inflow=0
+            u1.outflow=0
+            d2.inflow=0
+            u2.outflow=0
+            d3.inflow=0
+            u3.outflow=0
+            d4.inflow=0
+            u4.outflow=0
+        elif self.phase[2]<=current_time<self.phase[3]-3:
             d1.inflow=min(u2.demand/3,d1.supply)
             d3.inflow=min(u4.demand/3,d3.supply)
             d2.inflow=min(u3.demand/3+u4.demand/3,d2.supply)
@@ -229,7 +255,16 @@ class _Connector(object):
             u3.outflow=min(u3.demand/3,d2.supply*u3.demand/(u3.demand+u4.demand))
             u2.outflow=min(u2.demand/3,d4.supply-u1.outflow)+d1.inflow
             u4.outflow=min(u4.demand/3,d2.supply-u3.outflow)+d3.inflow
-        elif self.phase[3]<=current_time<self.phase[4]:
+        elif self.phase[3]-3<=current_time<self.phase[3]:
+            d1.inflow=0
+            u1.outflow=0
+            d2.inflow=0
+            u2.outflow=0
+            d3.inflow=0
+            u3.outflow=0
+            d4.inflow=0
+            u4.outflow=0
+        elif self.phase[3]<=current_time<self.phase[4]-3:
             d2.inflow=min(u3.demand/3,d2.supply)
             d4.inflow=min(u1.demand/3,d4.supply)
             d1.inflow=min(u2.demand/3+u4.demand/3,d1.supply)
@@ -238,6 +273,15 @@ class _Connector(object):
             u3.outflow=d2.inflow
             u2.outflow=min(u2.demand/3,(d1.supply+d3.supply)*u2.demand/(u2.demand+u4.demand))
             u4.outflow=min(u4.demand/3,(d1.supply+d3.supply)*u4.demand/(u2.demand+u4.demand))
+        elif self.phase[4]-3<=current_time<self.phase[4]:
+            d1.inflow=0
+            u1.outflow=0
+            d2.inflow=0
+            u2.outflow=0
+            d3.inflow=0
+            u3.outflow=0
+            d4.inflow=0
+            u4.outflow=0
 
     def calculate_flow(self, current_time):
         """calculate the inflows and outflows for the upstream and downstream sections"""
