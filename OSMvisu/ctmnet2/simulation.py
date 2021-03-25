@@ -318,8 +318,6 @@ class Simulator(object):
                         vels.append(sec.free_speed)
                     else:
                         vels.append(round(flow*3600/sec.interval/(vol/sec.cell_length),2))
-                        #if flow/vol>=0.48:
-                            #print("out",sec[k-1].volume,sec[k-1].demand,sec[k].supply,sec[k].volume,sec[k].demand,sec[k+1].supply,sec[k+1].volume,sec[k+1].demand,sec[k+2].supply,vels[-1])
                 
                 # calculate for the last cell
                 flow = sec.outflow
@@ -335,8 +333,8 @@ class Simulator(object):
             for i,sec in self.sections.items():
                 flow = sum(sec.flows)+sec.outflow
                 volume = sum([c.re_volume for c in sec])
-                if volume==0:
-                    vel = 0
+                if volume<=1:
+                    vel = sec.free_speed
                 else:
                     vel = round(flow*3600/sec.interval/(volume/sec.lanes_length),2)
                 velocities[i]=vel
