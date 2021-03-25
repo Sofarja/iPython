@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sections>
+	<section id="1">
+		<detectors>0 1 </detectors>
+	</section>
+	<section id="2">
+		<detectors>2 3 4 </detectors>
+	</section>
+	<section id="3">
+		<detectors>5 6 7 </detectors>
+	</section>
+	<section id="4">
+		<detectors>8 9 </detectors>
+	</section>
+	<section id="5">
+		<detectors>10 11 12 </detectors>
+	</section>
+	<section id="6">
+		<detectors>13 14 15 </detectors>
+	</section>
+</sections>
