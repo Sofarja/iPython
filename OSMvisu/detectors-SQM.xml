@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<detectors>
+	<detector id="0">
+		<volume>10</volume>
+		<coor>[32.00537733429174, 118.7906896331726]</coor>
+	</detector>
+	<detector id="1">
+		<volume>8</volume>
+		<coor>[32.00540405344574, 118.79016090304975]</coor>
+	</detector>
+	<detector id="2">
+		<volume>9</volume>
+		<coor>[32.00543095640977, 118.78963218576456]</coor>
+	</detector>
+	<detector id="3">
+		<volume>10</volume>
+		<coor>[32.00545921691652, 118.78910357906531]</coor>
+	</detector>
+	<detector id="4">
+		<volume>7</volume>
+		<coor>[32.00549188452857, 118.78857533694296]</coor>
+	</detector>
+	<detector id="5">
+		<volume>8</volume>
+		<coor>[32.00553004939668, 118.7880475956698]</coor>
+	</detector>
+	<detector id="6">
+		<volume>6</volume>
+		<coor>[32.00557049901845, 118.7875200846185]</coor>
+	</detector>
+	<detector id="7">
+		<volume>5</volume>
+		<coor>[32.00561097244149, 118.7869925738731]</coor>
+	</detector>
+	<detector id="8">
+		<volume>9</volume>
+		<coor>[32.00540405344574, 118.79016090304975]</coor>
+	</detector>
+	<detector id="9">
+		<volume>5</volume>
+		<coor>[32.00537733429174, 118.7906896331726]</coor>
+	</detector>
+	<detector id="10">
+		<volume>5</volume>
+		<coor>[32.00549188452857, 118.78857533694296]</coor>
+	</detector>
+	<detector id="11">
+		<volume>6</volume>
+		<coor>[32.00545921691652, 118.78910357906531]</coor>
+	</detector>
+	<detector id="12">
+		<volume>7</volume>
+		<coor>[32.00543095640977, 118.78963218576456]</coor>
+	</detector>
+	<detector id="13">
+		<volume>6</volume>
+		<coor>[32.00561097244149, 118.7869925738731]</coor>
+	</detector>
+	<detector id="14">
+		<volume>5</volume>
+		<coor>[32.00557049901845, 118.7875200846185]</coor>
+	</detector>
+	<detector id="15">
+		<volume>5</volume>
+		<coor>[32.00553004939668, 118.7880475956698]</coor>
+	</detector>
+</detectors>
