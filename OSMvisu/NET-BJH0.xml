@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net>
+  <sections>
+    <section id="1">
+      <name>双龙大道北</name>
+      <lanes_length>290</lanes_length>
+      <lanes_number>6</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.93069529155155, 118.82148453298552), (31.930246138085977, 118.82148225070165), (31.929796998023157, 118.82147803214595), (31.929347869130105, 118.82147277434632), (31.928898727675314, 118.82147194547036), (31.928449575891772, 118.82147464849012)</coordinates>
+    </section>
+    <section id="2">
+      <name>双龙大道南</name>
+      <lanes_length>240</lanes_length>
+      <lanes_number>4</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.92602439085721, 118.8218890792478), (31.926462293817245, 118.8217752067444), (31.92690508033259, 118.82168929249532), (31.92735198214892, 118.8216387347225), (31.92779997513195, 118.82160157320486)</coordinates>
+    </section>
+    <section id="3">
+      <name>天元西路</name>
+      <lanes_length>290</lanes_length>
+      <lanes_number>5</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.928249642075244, 118.81847650793793), (31.9282278462437, 118.81900507512597), (31.92820684424207, 118.819533643352), (31.928191327995137, 118.82006248869412), (31.9281722308654, 118.82059119112802), (31.928149427829588, 118.82111973144082)</coordinates>
+    </section>
+    <section id="4">
+      <name>天元中路</name>
+      <lanes_length>290</lanes_length>
+      <lanes_number>5</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.92800590650252, 118.82447899016063), (31.92803205237915, 118.82395066822053), (31.928057053867953, 118.8234222960742), (31.928077328196128, 118.82289364490185), (31.928097000895598, 118.8223649378071), (31.928118333631865, 118.82183631260237)</coordinates>
+    </section>
+    <section id="5">
+      <name>双龙大道北</name>
+      <lanes_length>190</lanes_length>
+      <lanes_number>4</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.928225, 118.821476), (31.929222, 118.82147), (31.93, 118.821481), (31.930984, 118.821486)</coordinates>
+    </section>
+    <section id="6">
+      <name>双龙大道南</name>
+      <lanes_length>340</lanes_length>
+      <lanes_number>4</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.928024, 118.821583), (31.927578, 118.82162), (31.9272, 118.821647), (31.926677, 118.821722), (31.926239, 118.82183),(31.925989, 118.821878),(31.925616, 118.822023)</coordinates>
+    </section>
+    <section id="7">
+      <name>天元西路</name>
+      <lanes_length>290</lanes_length>
+      <lanes_number>5</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.928138, 118.821384), (31.92817, 118.820644), (31.928193, 118.820108), (31.928206, 118.819442), (31.928243, 118.818702),(31.928261, 118.818123)</coordinates>
+    </section>
+    <section id="8">
+      <name>天元中路</name>
+      <lanes_length>240</lanes_length>
+      <lanes_number>5</lanes_number>
+      <cell_length>0.05</cell_length>
+      <free_speed>60</free_speed>
+      <wave_speed>8</wave_speed>
+      <jam_density>200</jam_density>
+      <coordinates>(31.928129, 118.821572), (31.928079, 118.822811), (31.928061, 118.823396), (31.92802, 118.824179),(31.927992, 118.824775)</coordinates>
+    </section>
+  </sections>
+	<connections>
+		<connection id="0">
+			<upstream>['1', '4', '2', '3']</upstream>
+			<downstream>['5', '8', '6', '7']</downstream>
+			<green_time>[50, 30, 37, 33]</green_time>
+      <off_set>20</off_set>
+		</connection>
+	</connections>
+</net>
