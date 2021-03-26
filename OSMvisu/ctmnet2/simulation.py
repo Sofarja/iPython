@@ -119,7 +119,7 @@ class Simulator(object):
         self.currenttime = 0
         self.arrival = _Arrival()
         self.departure = _Departure()
-        random.seed(100)
+        random.seed(666)
 
     def create(self,objclass,objid,kargs):
         """ create network elements
@@ -344,4 +344,27 @@ class Simulator(object):
                 
     def get_saturation(self, level='cell'):
         pass
+
+    def get_delay(self, level='cell'):
+        delay = {}
+        if level=='cell':
+            for i,sec in self.sections.items():
                 
+                DLAs = []
+                
+                for k, flow in enumerate(sec.flows):
+                    DLAs.append(sec[k].re_volume - flow)
+                
+                # calculate for the last cell
+                flow = sec.outflow
+                DLAs.append(sec[-1].re_volume - flow)
+
+                delay[i] = DLAs
+        
+        elif level=='section':
+            for i,sec in self.sections.items():
+                flow = sum(sec.flows)+sec.outflow
+                volume = sum([c.re_volume for c in sec])
+                delay[i] = volume - flow
+        
+        return delay
