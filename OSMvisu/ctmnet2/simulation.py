@@ -12,20 +12,41 @@ from .base import _Connector
 import random
 from random import uniform
 
+
 def _poisson(lam):
+    #global vn
     u = uniform(0,1)
     p = 2.718281828459045**(-lam)
     f = p
     k = 0
     if u < f:
+        #vn+=k
         return k
     else:   
         while f < u:
             p = p*lam/(k+1)
             f += p
             k += 1
+        #vn+=k-1
         return k-1
     
+def _binomial(n):
+    global vn
+    u = uniform(0,1)
+    pa = 0.3
+    p = (1-pa)**n
+    f = p
+    k = 0
+    if u < f:
+        vn+=k
+        return k
+    else:   
+        while f < u:
+            k += 1
+            p = (n-k+1)/k*pa/(1-pa)*p
+            f += p
+        vn+=k
+        return k
 
 def _constant(x):
     return x
@@ -41,7 +62,7 @@ class _Arrival(object):
         self.volume=[]  # pcu/h
         self.dist_func=[]
 
-    def add(self, section, volume, distribution='poisson'):
+    def add(self, section, volume, distribution='binomial'):
         self.section.append(section)
         
         self.volume.append(volume) 
@@ -50,6 +71,8 @@ class _Arrival(object):
             self.dist_func.append(_poisson) # 储存函数名
         elif distribution == 'constant':
             self.dist_func.append(_constant)
+        elif distribution == 'binomial':
+            self.dist_func.append(_binomial)
         else:
             raise ValueError('No such type of distribution')
 
@@ -119,7 +142,9 @@ class Simulator(object):
         self.currenttime = 0
         self.arrival = _Arrival()
         self.departure = _Departure()
-        random.seed(666)
+        random.seed(333)
+        global vn
+        vn = 0
 
     def create(self,objclass,objid,kargs):
         """ create network elements
@@ -155,7 +180,7 @@ class Simulator(object):
         cnct = _Connector(upstream,downstream,green_time,off_set)
         self.connectors.append(cnct)
 
-    def set_arrival(self,section_id,arrival_volume,distribution='poisson'):
+    def set_arrival(self,section_id,arrival_volume,distribution='binomial'):
         """set number of vehicles arriving from the upstream
         
         Args:
@@ -366,5 +391,8 @@ class Simulator(object):
                 flow = sum(sec.flows)+sec.outflow
                 volume = sum([c.re_volume for c in sec])
                 delay[i] = volume - flow
-        
         return delay
+    
+    def get_vnum(self):
+        global vn
+        return vn
