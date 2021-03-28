@@ -86,7 +86,7 @@
 		<connection id="0">
 			<upstream>['1', '4', '2', '3']</upstream>
 			<downstream>['5', '8', '6', '7']</downstream>
-			<green_time>[25, 32, 48, 40]</green_time>
+			<green_time>[44, 26, 48, 27]</green_time>
       <off_set>20</off_set>
 		</connection>
 	</connections>
