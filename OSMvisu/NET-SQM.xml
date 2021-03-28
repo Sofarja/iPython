@@ -3,63 +3,33 @@
   <sections>
     <section id="1">
       <name>1</name>
-      <lanes_length>99</lanes_length>
+      <lanes_length>149</lanes_length>
       <lanes_number>5</lanes_number>
       <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
+      <free_speed>60</free_speed>
       <wave_speed>8</wave_speed>
       <jam_density>200</jam_density>
-      <coordinates>(32.00537733429174, 118.7906896331726), (32.00540405344574, 118.79016090304975)</coordinates>
+      <coordinates>(32.00537733429174, 118.7906896331726), (32.00540405344574, 118.79016090304975), (32.00543095640977, 118.78963218576456)</coordinates>
     </section>
     <section id="2">
       <name>2</name>
-      <lanes_length>149</lanes_length>
+      <lanes_length>99</lanes_length>
       <lanes_number>4</lanes_number>
       <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
+      <free_speed>60</free_speed>
       <wave_speed>8</wave_speed>
       <jam_density>200</jam_density>
-      <coordinates>(32.00543095640977, 118.78963218576456), (32.00545921691652, 118.78910357906531), (32.00549188452857, 118.78857533694296)</coordinates>
+      <coordinates>(32.00545921691652, 118.78910357906531), (32.00549188452857, 118.78857533694296)</coordinates>
     </section>
     <section id="3">
       <name>3</name>
       <lanes_length>149</lanes_length>
       <lanes_number>3</lanes_number>
       <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
+      <free_speed>60</free_speed>
       <wave_speed>8</wave_speed>
       <jam_density>200</jam_density>
       <coordinates>(32.00553004939668, 118.7880475956698), (32.00557049901845, 118.7875200846185), (32.00561097244149, 118.7869925738731)</coordinates>
-    </section>
-    <section id="4">
-      <name>4</name>
-      <lanes_length>99</lanes_length>
-      <lanes_number>3</lanes_number>
-      <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
-      <wave_speed>8</wave_speed>
-      <jam_density>200</jam_density>
-      <coordinates>(32.00540405344574, 118.79016090304975), (32.00537733429174, 118.7906896331726)</coordinates>
-    </section>
-    <section id="5">
-      <name>5</name>
-      <lanes_length>149</lanes_length>
-      <lanes_number>4</lanes_number>
-      <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
-      <wave_speed>8</wave_speed>
-      <jam_density>200</jam_density>
-      <coordinates>(32.00549188452857, 118.78857533694296), (32.00545921691652, 118.78910357906531), (32.00543095640977, 118.78963218576456)</coordinates>
-    </section>
-    <section id="6">
-      <name>6</name>
-      <lanes_length>149</lanes_length>
-      <lanes_number>5</lanes_number>
-      <cell_length>0.05</cell_length>
-      <free_speed>80</free_speed>
-      <wave_speed>8</wave_speed>
-      <jam_density>200</jam_density>
-      <coordinates>(32.00561097244149, 118.7869925738731), (32.00557049901845, 118.7875200846185), (32.00553004939668, 118.7880475956698)</coordinates>
     </section>
   </sections>
 	<connections>
@@ -72,18 +42,6 @@
     <connection id="1">
       <upstream>['2']</upstream>
       <downstream>['3']</downstream>
-      <green_time>[0]</green_time>
-      <off_set>0</off_set>
-    </connection>
-    <connection id="2">
-      <upstream>['6']</upstream>
-      <downstream>['5']</downstream>
-      <green_time>[0]</green_time>
-      <off_set>0</off_set>
-    </connection>
-    <connection id="3">
-      <upstream>['5']</upstream>
-      <downstream>['4']</downstream>
       <green_time>[0]</green_time>
       <off_set>0</off_set>
     </connection>
