@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>覆盖物事件</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <style>
+        html,body,#container{
+            height:100%;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<div class="info" id="text">
+    请点击路段或交叉口
+</div>
+<div class="input-card" style="width:18rem">
+    <h4>获取xml信息</h4>
+    <div>
+      <div class="input-item">
+        <button id="clickOn" class="btn" style="margin-right:1rem;">开启</button>
+        <button id="clickOff" class="btn">关闭</button>
+      </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript">
+    //初始化地图对象，加载地图
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+    var lineArr = [
+        [118.765553,31.895626],
+        [118.765081,31.895608],
+        [118.765553,31.89538],
+        [118.765843,31.895599]
+    ];
+    var circle = new AMap.Circle({
+        map: map,
+        center: lineArr[0],          //设置线覆盖物路径
+        radius: 20,
+        strokeColor: "#3366FF", //边框线颜色
+        strokeOpacity: 0,       //边框线透明度
+        strokeWeight: 3,        //边框线宽
+        fillColor: "#FFA500", //填充色
+        fillOpacity: 0//填充透明度
+    });
+    var polylineArr = [[118.765671,31.895617],
+        [118.766315,31.895708],
+        [118.767356,31.895726],
+        [118.768643,31.89579]];
+    var polyline = new AMap.Polyline({
+        map: map,
+        path: polylineArr,//设置路径
+        strokeColor: "#FF0000", //线颜色
+        strokeOpacity: 0, //线透明度
+        strokeWeight: 20,    //线宽
+    });
+    map.setFitView();
+
+    function showInfoC(e){
+        var infoWindowContent = '<div class="CodeMirror-code" role="presentation" style=""><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">connection</span> <span class="cm-attribute">id</span>=<span class="cm-string">"4"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">upstream</span><span class="cm-tag cm-bracket">&gt;</span>[44, 0, 13]<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">upstream</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">downstream</span><span class="cm-tag cm-bracket">&gt;</span>[14, 30, 43]<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">downstream</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">green_time</span><span class="cm-tag cm-bracket">&gt;</span>[40, 20, 15]<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">green_time</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">off_set</span><span class="cm-tag cm-bracket">&gt;</span>60<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">off_set</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">connection</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div>'
+        var lnglat = new AMap.LngLat(e.lnglat.getLng(),e.lnglat.getLat());
+        var infoWindow = new AMap.InfoWindow({
+          	isCustom: false,  //使用自定义窗体
+          	closeWhenClickMap: true,
+        	position: lnglat,
+        	offset: new AMap.Pixel(0, -35),
+        	content: infoWindowContent,
+          	size: new AMap.Size(400,220)
+    	});
+      	var infoWindow = infoWindow.open(map);
+    }
+    function showInfoP(e){
+        var infoWindowContent = '<div class="CodeMirror-code" role="presentation" style=""><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">section</span> <span class="cm-attribute">id</span>=<span class="cm-string">"0"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">name</span><span class="cm-tag cm-bracket">&gt;</span>诚信大道<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">name</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">lanes_length</span><span class="cm-tag cm-bracket">&gt;</span>276.91<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">lanes_length</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">lanes_number</span><span class="cm-tag cm-bracket">&gt;</span>1<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">lanes_number</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">cell_length</span><span class="cm-tag cm-bracket">&gt;</span>0.05<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">cell_length</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">free_speed</span><span class="cm-tag cm-bracket">&gt;</span>60<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">free_speed</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">wave_speed</span><span class="cm-tag cm-bracket">&gt;</span>8<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">wave_speed</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">jam_density</span><span class="cm-tag cm-bracket">&gt;</span>200<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">jam_density</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">coordinates</span><span class="cm-tag cm-bracket">&gt;</span>(31.8980485, 118.7632792), (31.898027915007606, 118.76275070664146), (31.89800733001521, 118.7622222132829), (31.897986745022816, 118.76169371992435), (31.89796616003042, 118.7611652265658), (31.897945575038026, 118.76063673320725), (31.8979351, 118.7603678)<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">coordinates</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">section</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div>'
+        var lnglat = new AMap.LngLat(e.lnglat.getLng(),e.lnglat.getLat());
+        var infoWindow = new AMap.InfoWindow({
+          	isCustom: false,  //使用自定义窗体
+          	closeWhenClickMap: true,
+        	position: lnglat,
+        	offset: new AMap.Pixel(0, -35),
+        	content: infoWindowContent,
+          	size: new AMap.Size(500,360)
+    	});
+      	var infoWindow = infoWindow.open(map);
+    }
+    function showInfoOver(e){
+        var text = '已选中'
+        document.querySelector("#text").innerText = text;
+    }
+    function showInfoOut(e){
+        var text = '未选中'
+        document.querySelector("#text").innerText = text;
+    }
+    
+    function clickOn(){
+        log.success("开启获取");  
+
+        circle.on('click', showInfoC);
+        polyline.on('click', showInfoP);
+
+        circle.on('mouseover', showInfoOver);
+        polyline.on('mouseover', showInfoOver);
+
+        circle.on('mouseout', showInfoOut);
+        polyline.on('mouseout', showInfoOut);
+    }
+    function clickOff(){
+        log.success("关闭获取"); 
+
+        circle.off('click', showInfoC);
+        polyline.off('click', showInfoP);
+
+        circle.off('mouseover', showInfoOver);
+        polyline.off('mouseover', showInfoOver);
+
+        circle.off('mouseout', showInfoOut);
+        polyline.off('mouseout', showInfoOut);
+    }
+    
+    // 给按钮绑定事件
+    document.getElementById("clickOn").onclick = clickOn;
+    document.getElementById("clickOff").onclick = clickOff;
+</script>
+</body>
+</html>
